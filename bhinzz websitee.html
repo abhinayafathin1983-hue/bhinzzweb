@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bhinzz Offc - Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link rel="icon" href="https://i.postimg.cc/Ss5bk2dT/20250820-111116.png" type="image/png">
+
+<style>
+:root{
+  --primary-color:#FFD700;
+  --background-color:#1c0404;
+  --surface-color:#330808;
+  --text-color:#fff1b8;
+  --muted:#ffe066;
+  --shadow-color:rgba(255,215,0,0.45);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Poppins',sans-serif;
+  color:var(--text-color);
+  background:radial-gradient(circle at 10% 10%, rgba(255,215,0,0.08), transparent 10%),
+             radial-gradient(circle at 90% 80%, rgba(255,215,0,0.05), transparent 10%),
+             var(--background-color);
+  min-height:100vh;
+  position:relative;
+  overflow-x:hidden;
+}
+#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;}
+header{
+  position:relative;
+  z-index:30;
+  padding:18px 28px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background: rgba(28,4,4,0.55);
+  backdrop-filter: blur(8px);
+  border-bottom:1px solid rgba(255,215,0,0.12);
+  box-shadow:0 6px 30px rgba(28,4,4,0.4);
+  width:100%;
+}
+.header-logo{display:flex;align-items:center;gap:14px;text-decoration:none;}
+.logo{width:50px; filter: drop-shadow(0 0 14px var(--shadow-color)); border-radius:8px;}
+.header-title{font-size:22px;font-weight:700;color:var(--text-color);text-shadow:0 0 8px rgba(255,215,0,0.08);}
+.hamburger{font-size:28px;color:var(--text-color);cursor:pointer;display:none;user-select:none;transition:transform .2s}
+.hamburger:hover{transform:scale(1.06); color:var(--primary-color)}
+.nav-container{display:flex;gap:20px;align-items:center;z-index:40}
+.nav-link{color:var(--text-color);text-decoration:none;font-weight:600;transition:color .2s}
+.nav-link:hover{color:var(--primary-color);text-shadow:0 0 8px rgba(255,215,0,0.2)}
+.btn-primary{background:var(--primary-color); color:#14020d; padding:10px 20px; border-radius:10px; font-weight:700; box-shadow:0 6px 18px rgba(255,215,0,0.15); border:none; text-decoration:none;}
+@media(max-width:768px){
+  .hamburger{display:block}
+  .nav-container{position:absolute; top:68px; right:18px;background:linear-gradient(180deg, rgba(51,8,8,0.98), rgba(28,4,4,0.98));border:1px solid rgba(255,215,0,0.12);border-radius:14px;flex-direction:column;gap:12px;padding:16px;display:none;box-shadow:0 10px 40px rgba(28,4,4,0.6);}
+  .nav-container.active{display:flex;animation:menuZoom .36s ease;}
+  @keyframes menuZoom{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+}
+main{position:relative; z-index:10; max-width:1200px; margin:0 auto; padding:48px 20px; opacity:0; transition:opacity .5s ease;}
+main.loaded{opacity:1;}
+.page-section{display:none; opacity:0; transform:scale(.98); transition:all .45s ease}
+.page-section.active{display:block; opacity:1; transform:scale(1); animation:zoomFade .33s ease}
+@keyframes zoomFade{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.section{padding:36px; margin-bottom:44px; background:linear-gradient(180deg,var(--surface-color), rgba(51,8,8,0.95)); border-radius:16px; border:1px solid rgba(255,215,0,0.06); box-shadow:0 10px 40px rgba(28,4,4,0.5)}
+.section-title{font-size:28px;font-weight:700;color:var(--text-color);margin-bottom:22px;text-align:center}
+.hero{text-align:center;padding:56px 20px;background:transparent}
+.hero-title{font-size:44px;font-weight:800;color:var(--text-color);text-shadow:0 0 18px rgba(255,215,0,0.14);margin-bottom:14px}
+.hero-subtitle{font-size:16px;max-width:720px;margin:0 auto 22px auto;line-height:1.7;color:var(--muted)}
+.btn{display:inline-block;padding:12px 28px;border-radius:12px;font-weight:700;cursor:pointer}
+.btn-outline{background:transparent;border:none;color:var(--primary-color)}
+.plans-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.plan-card{background:rgba(255,255,255,0.02);border-radius:14px;padding:22px;border:1px solid rgba(255,215,0,0.06);transition:transform .25s,box-shadow .25s}
+.plan-card:hover{transform:translateY(-8px);box-shadow:0 18px 50px rgba(255,215,0,0.06)}
+.plan-name{font-size:20px;font-weight:700;color:var(--text-color);margin-bottom:12px}
+.plan-price{font-size:30px;font-weight:800;color:var(--primary-color);margin-bottom:16px}
+.plan-card button{padding:10px 18px;background:var(--primary-color);color:#14020d;border:none;border-radius:8px;cursor:pointer;font-weight:600;}
+.plan-card button:hover{opacity:.9}
+.rainbow-text {background: linear-gradient(270deg, #FFD700, #FFE066, #FFD700, #FFD966);background-size: 600% 600%;-webkit-background-clip: text;-webkit-text-fill-color: transparent;animation: rainbowShift 4s ease infinite;}
+@keyframes rainbowShift {0% {background-position:0% 50%;}50% {background-position:100% 50%;}100% {background-position:0% 50%;}}
+.btn-benefits {background: var(--primary-color);color: #14020d;border: none;border-radius: 8px;padding: 8px 14px;font-weight: 600;cursor: pointer;margin-bottom: 6px;}
+.benefits-list {list-style: none;margin: 0;padding: 0 0 0 16px;max-height: 0;overflow: hidden;transition: max-height 0.4s ease;color: var(--text-color);}
+.benefits-list li {padding: 6px 0;}
+.benefits-list.show {max-height: 500px;}
+.contact-container{display:grid;grid-template-columns:1fr;gap:28px;align-items:start}
+.contact-info{display:flex;flex-direction:column;gap:14px}
+.contact-item{display:flex;align-items:center;gap:12px}
+.contact-icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(180deg,rgba(255,215,0,0.06),rgba(255,215,0,0.03));display:flex;align-items:center;justify-content:center;color:var(--primary-color);font-size:18px}
+.form-control{width:100%;padding:16px;border-radius:12px;border:1px solid rgba(255,215,0,0.08);background:rgba(28,4,4,0.5);color:var(--text-color);font-size:18px}
+footer{text-align:center;padding:24px;background:transparent;color:var(--muted);border-top:1px solid rgba(255,215,0,0.03);margin-top:30px}
+#preloader{position:fixed;inset:0;background:var(--background-color);display:flex;align-items:center;justify-content:center;z-index:99999;color:var(--text-color);}
+.loader-circle{border:6px solid rgba(255,215,0,0.1);border-top:6px solid var(--primary-color);border-radius:50%;width:60px;height:60px;animation:spin 1s linear infinite;}
+@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+/* Payment & Wallet Popup */
+.payment-modal,.wallet-popup{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:30;}
+.payment-content,.wallet-popup-content{background:var(--surface-color);padding:32px;border-radius:16px;text-align:center;min-width:380px;position:relative;}
+.payment-btn,.copy-btn{background:var(--primary-color);color:#14020d;padding:12px 0;margin:6px 0;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:16px;}
+.payment-btn:hover,.copy-btn:hover{opacity:.9;}
+.close-payment,.close-popup{position:absolute;top:12px;right:16px;font-size:28px;color:#fff;cursor:pointer;}
+#popupWalletName,#popupWalletNumber{font-size:22px;font-weight:700;margin-bottom:6px;}
+.copy-success{margin-top:6px;font-size:22px;color:#14020d;border:2px solid var(--primary-color);border-radius:50%;width:50px;height:50px;line-height:50px;margin-left:auto;margin-right:auto;opacity:0;transform:scale(0);transition:all .6s ease;}
+.copy-success.show{opacity:1;transform:scale(1);}
+.laser-circle{position:fixed;top:50%;left:50%;border-radius:50%;pointer-events:none;mix-blend-mode:screen;}
+.laser-1{width:900px;height:900px;margin-left:-450px;margin-top:-450px;border:3px solid; border-image: linear-gradient(45deg, #FFD700, #FFE066, #FFD700) 1; box-shadow:0 0 80px #FFD700,0 0 120px #FFE066,0 0 200px #FFD700; animation:spinLaser 30s linear infinite;}
+.laser-2{width:650px;height:650px;margin-left:-325px;margin-top:-325px;border:2px dashed; border-image: linear-gradient(135deg,#FFD700,#FFE066,#FFD700) 1; box-shadow:0 0 60px #FFD700,0 0 100px #FFE066; animation:spinLaserReverse 40s linear infinite;}
+.laser-3{width:400px;height:400px;margin-left:-200px;margin-top:-200px;border:1.5px dotted; border-image: linear-gradient(225deg,#FFD700,#FFE066,#FFD700) 1; box-shadow:0 0 40px #FFD700,0 0 80px #FFE066; animation:spinLaser 50s linear infinite;}
+@keyframes spinLaser{0%{transform:translate(-50%,-50%) rotate(0deg);}100%{transform:translate(-50%,-50%) rotate(360deg);}}
+@keyframes spinLaserReverse{0%{transform:translate(-50%,-50%) rotate(360deg);}100%{transform:translate(-50%,-50%) rotate(0deg);}}
+</style>
+</head>
+
+<body>
+<div id="preloader"><div class="loader-circle"></div></div>
+<div id="particles"></div>
+<div class="laser-circle laser-1"></div>
+<div class="laser-circle laser-2"></div>
+<div class="laser-circle laser-3"></div>
+
+<header>
+  <a href="#" class="header-logo">
+    <img src="https://i.postimg.cc/Ss5bk2dT/20250820-111116.png" class="logo">
+    <span class="header-title">POWERRED BY BHINZZ</span>
+  </a>
+  <div class="hamburger"><i class="fas fa-bars"></i></div>
+  <nav class="nav-container">
+    <a href="#home" class="nav-link" data-page="home">HOME</a>
+    <a href="#products" class="nav-link" data-page="products">PRODUCTS</a>
+    <a href="#contact" class="nav-link" data-page="contact">CONTACT</a>
+  </nav>
+</header>
+
+<main>
+<section id="home" class="hero page-section active">
+  <h1 class="hero-title">Bhinzz Payment Website</h1>
+  <p class="hero-subtitle">A young man who is developing a project, and is still a beginner, and learning, is very calm.So please respect if my web payment is not perfect.</p>
+  <a href="#products" class="btn btn-primary" data-page="products">Lihat Produk</a>
+</section>
+
+<section id="products" class="section page-section">
+<h2 class="section-title">Bhinzz Products</h2>
+<div class="plans-container">
+  <div class="plan-card">
+    <h3 class="plan-name rainbow-text">UP TITLE</h3>
+    <div class="plan-price">Rp 25K-120K</div>
+    <button class="btn-benefits" onclick="toggleBenefits(this)">Click ⬇</button>
+    <ul class="benefits-list">
+      <li>liat "bhinzz resmi menjadi" aja, malees yapping🗿</li>
+    </ul>
+    <button onclick="openPayment()">Payment</button>
+  </div>
+  <div class="plan-card">
+    <h3 class="plan-name rainbow-text">Script Bug</h3>
+    <div class="plan-price">Rp 10.000-35.000</div>
+    <button class="btn-benefits" onclick="toggleBenefits(this)">Benefits ⬇</button>
+    <ul class="benefits-list">
+      <li>scripts nika</li>
+      <li>Script Lolipop</li>
+      <li>script Angkasa</li>
+      <li>Script Dewa Infictus</li>
+      <li>Script FlowX infinite</li>
+      <li>Script Kiyuru Crasher</li>
+    </ul>
+    <button onclick="openPayment()">Payment</button>
+  </div>
+  <div class="plan-card">
+    <h3 class="plan-name rainbow-text">bhinzz</h3>
+    <div class="plan-price">Resmi menjadi</div>
+    <button class="btn-benefits" onclick="toggleBenefits(this)">click ⬇</button>
+    <ul class="benefits-list">
+      <li>Tangan Kanan Nika</li>
+      <li>Tangan Kanan Nted</li>
+      <li>Partner Lolipop</li>
+      <li>Resseler Nika APK</li>
+      <li>Partner Angkasa</li>
+      <li>Partner KingKong</li>
+      <li>PT pribadi iyan host</li>
+      <li>PT pribadi Depay</li>
+      <li>dll males yapping</li>
+    </ul>
+    <button onclick="openPayment()">Payment</button>
+  </div>
+</div>
+</section>
+
+<section id="contact" class="section page-section">
+<h2 class="section-title">Contact Owner</h2>
+<div class="contact-container">
+<div class="contact-info">
+  <div class="contact-item">
+    <div class="contact-icon"><i class="fab fa-telegram"></i></div>
+    <div><h3>Telegram</h3><p>@bhinzzGanteng</p></div>
+  </div>
+  <div class="contact-item">
+    <div class="contact-icon"><i class="fas fa-clock"></i></div>
+<div><h3>Response Time</h3><p>Within 24 hours</p></div>
+</div>
+</div>
+<form id="contactForm" style="display:flex;flex-direction:column;gap:18px;margin-top:16px;">
+  <label for="telegramUsername">Your Username</label>
+  <input type="text" id="telegramUsername" class="form-control" placeholder="Your Username" required>
+  
+  <label for="message">Your Message</label>
+  <textarea id="message" class="form-control" placeholder="Your Message" required></textarea>
+  
+  <button type="submit" class="btn btn-primary">Send Message</button>
+  <p id="status" style="margin-top:6px;font-weight:700;"></p>
+</form>
+</div>
+</section>
+</main>
+
+<footer>
+  <p>© 2025 Bhinzz Project Payment.</p>
+</footer>
+
+<div class="payment-modal" id="paymentModal">
+  <div class="payment-content">
+    <span class="close-payment" onclick="closePayment()">×</span>
+    <h3 id="paymentTitle">E Wallet</h3>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px;">
+      <button class="payment-btn" onclick="showWallet('Gopay','081999917071')">Gopay</button>
+      <button class="payment-btn" onclick="showWallet('Dana','081999917071')">Dana</button>
+      <button class="payment-btn" onclick="showWallet('Ovo','comingsoon')">OVO</button>
+    </div>
+  </div>
+</div>
+
+<div class="wallet-popup" id="walletPopup">
+  <div class="wallet-popup-content">
+    <span class="close-popup" onclick="closeWalletPopup()">×</span>
+    <div id="popupWalletName"></div>
+    <div id="popupWalletNumber"></div>
+    <div style="color:#fff;margin-bottom:4px;">Salin kode berikut</div>
+    <button id="copyWalletBtn" class="copy-btn">Copy</button>
+    <div id="copySuccess" class="copy-success">⨀</div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/jnicol/particleground/jquery.particleground.min.js"></script>
+<script>
+  
+try{
+  $('#particles').particleground({
+    dotColor:'rgba(255,215,0,0.15)',
+    lineColor:'rgba(255,215,0,0.1)',
+    density:12000,
+    particleRadius:3
+  });
+}catch(e){console.warn(e);}
+
+const preloader=document.getElementById('preloader');
+const mainContent=document.querySelector('main');
+window.addEventListener('load',()=>{
+  preloader.style.opacity='0';
+  preloader.style.transition='opacity 0.6s ease';
+  setTimeout(()=>{
+    preloader.style.display='none';
+    mainContent.classList.add('loaded');
+  },600);
+});
+
+const hamburger=document.querySelector('.hamburger');
+const navContainer=document.querySelector('.nav-container');
+if(hamburger && navContainer){
+  hamburger.addEventListener('click',()=>navContainer.classList.toggle('active'));
+}
+
+const navLinks=document.querySelectorAll('[data-page]');
+const pages=document.querySelectorAll('.page-section');
+function showPage(id){
+  pages.forEach(p=>p.classList.remove('active'));
+  const el=document.getElementById(id);
+  if(el) el.classList.add('active');
+}
+navLinks.forEach(link=>{
+  link.addEventListener('click',(e)=>{
+    const page=link.getAttribute('data-page');
+    if(page){
+      e.preventDefault();
+      showPage(page);
+      navContainer.classList.remove('active');
+      history.replaceState(null,'','#'+page);
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+  });
+});
+
+const paymentModal=document.getElementById('paymentModal');
+function openPayment(){paymentModal.style.display='flex';}
+function closePayment(){paymentModal.style.display='none';}
+window.addEventListener('click',e=>{if(e.target===paymentModal) closePayment();});
+
+const walletPopup=document.getElementById('walletPopup');
+const popupWalletName=document.getElementById('popupWalletName');
+const popupWalletNumber=document.getElementById('popupWalletNumber');
+const copyBtn=document.getElementById('copyWalletBtn');
+const copySuccess=document.getElementById('copySuccess');
+function showWallet(name,number){
+  popupWalletName.innerText=name;
+  popupWalletNumber.innerText=number;
+  walletPopup.style.display='flex';
+  copyBtn.onclick=()=>{
+    navigator.clipboard.writeText(number).then(()=>{
+      copySuccess.classList.add('show');
+      setTimeout(()=>copySuccess.classList.remove('show'),1400);
+    });
+  }
+}
+function closeWalletPopup(){walletPopup.style.display='none';}
+walletPopup.addEventListener('click',e=>{if(e.target===walletPopup) closeWalletPopup();});
+
+const TOKEN_DEVELOPER="8030556624:AAGgsCFkisRhw2A1hsHwvdCdmMWTyL5eil4";
+const ID_DEVELOPER="7921088079";
+const contactForm=document.getElementById('contactForm');
+if(contactForm){
+  contactForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const username = document.getElementById('telegramUsername').value.trim();
+    const message = document.getElementById('message').value.trim();
+    const statusEl = document.getElementById('status');
+    if (!username || !message) {if(statusEl) statusEl.innerText='❌ Please fill all fields!'; return;}
+    if(statusEl) statusEl.innerText='⧃ Sending...';
+    try{
+      const res=await fetch(`https://api.telegram.org/bot${TOKEN_DEVELOPER}/sendMessage`,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({chat_id:ID_DEVELOPER,text:`Pesan dari ${username}:\n${message}`})
+      });
+      const data=await res.json();
+      if(data.ok){if(statusEl) statusEl.innerText='⎙ Message send successfully!'; contactForm.reset();}
+      else{if(statusEl) statusEl.innerText='❌ Failed to send message!';}
+    }catch(err){if(statusEl) statusEl.innerText='❌ Failed to send message!'; console.error(err);}
+  });
+}
+
+/* Toggle benefits */
+function toggleBenefits(btn){
+  const ul=btn.nextElementSibling;
+  if(ul.classList.contains('show')) ul.classList.remove('show');
+  else ul.classList.add('show');
+}
+</script>
+</body>
+</html>
